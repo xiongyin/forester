@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery Hello</title>
+    <script src="jquery-1.7.2.js"></script>
+    <script type="text/javascript" >
+        //$(function(){})相当于window.onload，代码写在{}之间
+        $(function () {
+            //1. 选取button：$("button")
+            //2. 为button 添加onclick 响应函数：$("button").click(function(){})
+            //代码写在function 的{} 中.
+            $("button").click(function () {
+
+                //3.弹出对话框
+                alert('Hello jQuery');
+                alert('DOM 对象的方法---'+this.firstChild.nodeValue);
+                alert('jQuery 对象的方法---'+$(this).text());
+
+                //jQuery 对象和 DOM=对象
+                //1. 由jQuery对象转为DOM对象
+                // 1).获取一个jQuery对象
+                var $btn = $("button");
+
+                //2).jQuery 对象是一个数组。
+                alert($btn.length);
+
+                //3).可以通过数组的下标转为DOM对象
+                alert($btn[1].firstChild.nodeValue);
+
+                //2.由DOM对象转为jQuery对象
+                //1).选取一个DOM对象
+                var btn = document.getElementById("btn");
+                //2).把DOM对象转为一个jQuery 对象：使用$() 进行包装
+                alert('>>>>>>>'+$(btn).text());
+
+            });
+        })
+    </script>
+</head>
+<body>
+
+<button id="btn">点击我</button>
+<br>
+<button>点击我2</button>
+</body>
+</html>

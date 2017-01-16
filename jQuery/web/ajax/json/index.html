@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <title>People at Clearleft</title>
+  <style type="text/css">
+  	@import url("clearleft.css");
+  </style>
+  <script type="text/javascript">
+      window.onload = function () {
+          var aNodes = document.getElementsByTagName("a");
+          for (var i = 0; i < aNodes.length; i++) {
+              aNodes[i].onclick = function () {
+                  var request = new XMLHttpRequest();
+                  var url = this.href;
+                  var method = "GET";
+                  request.open(method, url);
+                  request.send(null);
+                  request.onreadystatechange = function () {
+                      if (request.readyState == 4) {
+                          if (request.status == 200 || request.status == 304) {
+                              //1. 结果为XML格式，所以要用responseXML 来获取
+                              var result = request.responseText;
+                              var object = eval("("+ result +")");
+
+                              //2. 不能直接使用，必须先创建相应的节点，再假如到details 中
+                              // 目标格式为：
+                            /*<h2><a href="mailto:andy@clearleft.com">Andy Budd</a></h2>
+                             <a href="http://andybudd.com/">http://andybudd.com/</a>*/
+                              var name = object.person.name;
+                              var website = result.getElementsByTagName("website")[0].firstChild.nodeValue;
+                              var email = result.getElementsByTagName("email")[0].firstChild.nodeValue;
+
+                              var aNode = document.createElement("a")
+                                  .appendChild(document.createTextNode(name));
+                              aNode.href = "mailto:" + email;
+
+                              var h2Node = document.createElement("h2");
+                              h2Node.appendChild(aNode);
+
+                              var aNode2 = document.createElement("a")
+                                  .appendChild(document.createTextNode(website));
+                              aNode2.href = website;
+
+                              var detailsNode = document.getElementById("details");
+                              detailsNode.innerHTML = "";
+                              detailsNode.appendChild(h2Node);
+                              detailsNode.appendChild(aNode2);
+
+                          }
+                      }
+                  }
+
+                  return false;
+              };
+          }
+      };
+  </script>
+</head>
+<body>
+  <h1>People</h1>
+  <ul>
+    <li>
+      <a href="files/andy.js">Andy</a>
+    </li>
+    <li>
+      <a href="files/richard.js">Richard</a>
+    </li>
+    <li>
+      <a href="files/jeremy.js">Jeremy</a>
+    </li>
+  </ul>
+  <div id="details"></div>
+</body>
+</html>
